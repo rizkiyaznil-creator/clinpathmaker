@@ -3,39 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clinical Pathway Maker</title>
+<title>Clinical Pathway Maker v2</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
 
-/* ── APP HEADER ── */
-#app-header{background:linear-gradient(135deg,#1a3a5c,#2d6a9f);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-#app-header h1{font-size:17px;font-weight:700;letter-spacing:.3px}
-#app-header .sub{font-size:10px;opacity:.75;margin-top:2px}
-#app-header .ver{font-size:10px;opacity:.6}
+/* ══════════════════════════════════════════════════════════════════════
+   VIEW SYSTEM
+   ══════════════════════════════════════════════════════════════════════ */
+#view-input{display:flex;flex-direction:column;min-height:100vh;background:#f0f4f8}
+#view-output{display:none;flex-direction:column;height:100vh;overflow:hidden}
 
-/* ── SETUP PANEL ── */
-#setup-panel{background:#fff;margin:14px 14px 0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden}
-#setup-toggle{background:#2d6a9f;color:#fff;padding:9px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:12px;user-select:none}
-#setup-toggle:hover{background:#245a8a}
-#setup-body{padding:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.fsec{grid-column:1/-1;font-weight:700;color:#1a3a5c;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #2d6a9f;padding-bottom:3px;margin-top:6px}
+/* ══════════════════════════════════════════════════════════════════════
+   VIEW 1 — INPUT
+   ══════════════════════════════════════════════════════════════════════ */
+.vi-header{background:linear-gradient(135deg,#1a3a5c,#2d6a9f);color:#fff;padding:20px;text-align:center;position:relative;flex-shrink:0}
+.vi-header h1{font-size:22px;font-weight:700;letter-spacing:.5px;margin-bottom:4px}
+.vi-header p{font-size:12px;opacity:.8;margin-bottom:0}
+.vi-help-btn{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:#fff;padding:7px 14px;border-radius:5px;cursor:pointer;font-size:11px;font-weight:700;font-family:Arial,sans-serif;transition:background .15s}
+.vi-help-btn:hover{background:rgba(255,255,255,.32)}
+
+.vi-body{flex:1;overflow-y:auto;padding:20px;max-width:960px;width:100%;margin:0 auto}
+
+/* Validation banner */
+#validation-banner{display:none;align-items:center;gap:10px;background:#fff0f0;border:1px solid #f5c2c7;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:#842029}
+#validation-banner button{margin-left:auto;background:none;border:none;color:#842029;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;opacity:.7}
+#validation-banner button:hover{opacity:1}
+
+/* Cards */
+.vi-card{background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin-bottom:16px;overflow:hidden}
+.vi-card-header{background:linear-gradient(135deg,#1a3a5c,#2d6a9f);color:#fff;padding:10px 16px;font-size:12px;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
+.vi-card-body{padding:16px}
+
+/* Form grid */
+.fg2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.fg3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fg-full{grid-column:1/-1}
 .fg{display:flex;flex-direction:column;gap:3px}
-.fg label{font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px}
-.fg input,.fg select,.fg textarea{padding:5px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;font-family:Arial,sans-serif;width:100%;transition:border .2s}
-.fg input:focus,.fg select:focus{outline:none;border-color:#2d6a9f;box-shadow:0 0 0 2px rgba(45,106,159,.15)}
-.span2{grid-column:span 2}
-.span3{grid-column:1/-1}
+.fg label{font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.fg input,.fg select,.fg textarea{padding:6px 9px;border:1px solid #ccc;border-radius:4px;font-size:12px;font-family:Arial,sans-serif;width:100%;transition:border .2s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:#2d6a9f;box-shadow:0 0 0 2px rgba(45,106,159,.15)}
+
+/* Required field markers */
+.req-star{color:#dc3545;font-weight:900;font-size:12px}
+.req-badge{display:inline-block;background:#dc3545;color:#fff;font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px}
+
+/* Error states */
+.input-error{border-color:#dc3545!important;box-shadow:0 0 0 2px rgba(220,53,69,.15)!important}
+.err-msg{display:none;color:#dc3545;font-size:10px;margin-top:2px;font-weight:600}
 
 /* Day labels row */
-#dayLabelsWrap{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-top:2px}
+#dayLabelsWrap{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-top:4px}
 .dl-item{display:flex;flex-direction:column;gap:2px}
 .dl-item label{font-size:9px;font-weight:700;color:#888;text-align:center}
-.dl-item input{width:78px;padding:4px 6px;border:1px solid #ccc;border-radius:4px;font-size:11px;text-align:center}
+.dl-item input{width:78px;padding:4px 6px;border:1px solid #ccc;border-radius:4px;font-size:11px;text-align:center;font-family:Arial,sans-serif}
 
-/* ── TOOLBAR ── */
-#toolbar{background:#f8f9fa;border-bottom:1px solid #dde;padding:7px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+/* Footer CTA */
+.vi-footer{background:#fff;border-top:1px solid #dde;padding:16px 20px;display:flex;justify-content:center;align-items:center;gap:14px;flex-shrink:0;position:sticky;bottom:0;z-index:100;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
+#btn-build{background:linear-gradient(135deg,#1565c0,#0288d1);color:#fff;font-size:13px;padding:11px 28px;border-radius:6px;border:none;cursor:pointer;font-weight:700;font-family:Arial,sans-serif;display:inline-flex;align-items:center;gap:7px;transition:all .2s;letter-spacing:.2px}
+#btn-build:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+
+/* ══════════════════════════════════════════════════════════════════════
+   VIEW 2 — OUTPUT
+   ══════════════════════════════════════════════════════════════════════ */
+#toolbar{background:#f8f9fa;border-bottom:1px solid #dde;padding:7px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex-shrink:0}
 .btn{padding:7px 14px;border-radius:5px;border:none;cursor:pointer;font-size:11px;font-weight:700;font-family:Arial,sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.btn-back{background:#1a3a5c;color:#fff}
+.btn-back:hover{background:#0d2137}
 .btn-export{background:#1e7e34;color:#fff}
 .btn-export:hover{background:#155724}
 .btn-print{background:#6c757d;color:#fff}
@@ -45,8 +79,14 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
 .btn-help{background:#5b5ea6;color:#fff}
 .btn-help:hover{background:#3d4080}
 .hint{font-size:10px;color:#888;margin-left:4px}
+.hint span{display:inline-block;padding:1px 5px;border-radius:2px;margin:0 2px;border:1px solid #ccc;font-size:9px}
 
-/* ── PANDUAN MODAL ── */
+#preview-wrap{flex:1;overflow-y:auto;background:#fff;margin:0;border-radius:0}
+#cp-doc{padding:18px;overflow-x:auto}
+
+/* ══════════════════════════════════════════════════════════════════════
+   PANDUAN MODAL
+   ══════════════════════════════════════════════════════════════════════ */
 #panduan-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9500;align-items:center;justify-content:center}
 #panduan-overlay.open{display:flex}
 #panduan-modal{background:#fff;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,.32);width:92%;max-width:880px;max-height:90vh;display:flex;flex-direction:column;animation:modalIn .18s ease}
@@ -70,87 +110,10 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
 .panduan-body .sp-item{font-size:10.5px}
 .panduan-body .sp-name{font-weight:700;color:#1a3a5c}
 .panduan-body .badge{display:inline-block;background:#dce6f1;color:#1a3a5c;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px}
-.hint span{display:inline-block;padding:1px 5px;border-radius:2px;margin:0 2px;border:1px solid #ccc;font-size:9px}
 
-/* ── PREVIEW AREA ── */
-#preview-wrap{margin:0 14px 14px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden}
-#cp-doc{padding:18px;overflow-x:auto}
-
-/* ── CP DOCUMENT ── */
-.cp-hdr{text-align:center;margin-bottom:10px;border:1px solid #333;padding:8px;background:#fff}
-.cp-hdr .rs1{font-size:13px;font-weight:700;color:#1a3a5c;text-transform:uppercase}
-.cp-hdr .rs2{font-size:13px;color:#1a3a5c;font-weight:600}
-.cp-hdr .cp-title{font-size:14px;font-weight:700;margin-top:6px;text-transform:uppercase;color:#000;letter-spacing:1px}
-.cp-hdr .cp-diag{font-size:13px;font-weight:700;color:#c00;letter-spacing:.5px;margin-top:2px}
-
-/* Meta strip */
-.meta-tbl{width:100%;border-collapse:collapse;margin-bottom:6px;font-size:10px;border:1px solid #888}
-.meta-tbl td{border-right:1px solid #888;padding:3px 8px;vertical-align:middle;white-space:nowrap}
-.meta-tbl td:last-child{border-right:none}
-.meta-tbl label{font-weight:700;color:#555;font-size:9px;text-transform:uppercase;margin-right:6px}
-.mv{display:inline-block;border-bottom:2px dashed #888;min-width:90px;vertical-align:bottom;font-size:10px}
-
-/* Patient info table */
-.pit{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:10px;table-layout:fixed}
-.pit td{border:1px solid #888;padding:3px 6px;vertical-align:top;word-break:break-word}
-.pit .lbl{background:#dce6f1;font-weight:700;word-break:normal}
-.pit .val{}
-.pit .vi{border-bottom:1px solid #888;min-height:18px;padding-bottom:2px;display:block;}
-
-/* Main CP table */
-.cpt{width:100%;border-collapse:collapse;font-size:9.5px;table-layout:fixed}
-.cpt th{background:#1a3a5c;color:#fff;padding:5px 3px;text-align:center;border:1px solid #666;font-size:9px;vertical-align:middle;word-break:break-word}
-.cpt td{border:1px solid #888;padding:2px 4px;vertical-align:top}
-.cpt .kegiatan-td{background:#dce6f1;font-weight:700;text-align:center;vertical-align:middle;font-size:9px;word-break:break-word}
-.cpt .subhdr-td{background:#bdd7ee;font-weight:700;font-size:9px;padding:3px 5px;vertical-align:middle}
-.cpt .uraian-td{font-size:9.5px;min-width:0}
-.cpt .ket-td{font-size:9px;color:#333;min-width:0;word-break:break-word}
-.cpt .day-td{text-align:center;cursor:pointer;user-select:none;position:relative;min-width:0}
-.day-td.req{background:#999999}
-.day-td.opt{background:#e6e6e6}
-.day-td.na{background:#fff}
-.day-td:hover::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.25)}
-
-/* Editable */
-[contenteditable]{outline:none;min-height:1em}
-[contenteditable]:focus{background:#fffff0;box-shadow:inset 0 0 0 1px #2d6a9f;border-radius:1px}
-[contenteditable]:empty:not(:focus)::before{content:attr(data-ph);color:#bbb;font-style:italic;pointer-events:none}
-
-/* Add/delete row controls */
-.add-row-btn{display:block;width:100%;padding:2px;border:1px dashed #7aaddd;background:transparent;color:#2d6a9f;cursor:pointer;font-size:9px;text-align:center;border-radius:2px;margin-top:2px}
-.add-row-btn:hover{background:#e8f0fe}
-.del-btn{float:right;background:none;border:none;color:#c00;cursor:pointer;font-size:11px;line-height:1;padding:0 0 0 4px;opacity:.5}
-.del-btn:hover{opacity:1}
-
-/* Varian table */
-.var-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:10px}
-.var-tbl th{background:#1a3a5c;color:#fff;padding:5px;text-align:center;border:1px solid #666}
-.var-tbl td{border:1px solid #888;padding:4px 6px;height:20px}
-
-/* Legend */
-.legend{margin-top:10px;border:1px solid #888;padding:6px 10px;font-size:9.5px}
-.legend strong{font-size:10px;display:block;margin-bottom:4px}
-.legend-tbl{border-collapse:collapse;font-size:9px;margin-top:3px}
-.sw{width:20px;height:11px;border:1px solid #666;}
-
-/* Signatures */
-.sigs-tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:9.5px;text-align:center}
-.sigs-tbl .sig-hdr{background:#dce6f1;font-weight:700;border:1px solid #888;padding:3px;text-align:center;font-size:9px}
-.sigs-tbl .sig-title{border:1px solid #888;padding:3px;text-align:center;vertical-align:top}
-.sigs-tbl .sig-body{border:1px solid #888;height:40px;text-align:center;vertical-align:bottom;padding:2px 4px}
-.sig-line{border-top:1px solid #333;padding-top:2px}
-.sig-name{font-weight:700}
-.sig-nip{color:#555}
-
-/* Proses button */
-.btn-process{background:linear-gradient(135deg,#1565c0,#0288d1);color:#fff;font-size:12px;padding:9px 20px;border-radius:5px;border:none;cursor:pointer;font-weight:700;font-family:Arial,sans-serif;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
-.btn-process:hover{opacity:.88;transform:translateY(-1px)}
-#matchedDiag{display:inline-flex;align-items:center;gap:6px;background:#e3f2fd;border:1px solid #90caf9;border-radius:4px;padding:4px 10px;color:#1565c0;font-size:11px;font-weight:700;margin-left:8px}
-
-/* ── WARN ICON (Level B — bukti lemah) ── */
-.warn-ico{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;background:#fff3cd;border:1px solid #ffc107;border-radius:2px;color:#856404;font-size:8px;font-weight:700;cursor:help;margin-right:3px;flex-shrink:0;vertical-align:middle;line-height:1}
-
-/* ── MODAL OVERLAY (Level A — tidak ditemukan / multi-match) ── */
+/* ══════════════════════════════════════════════════════════════════════
+   DIAGNOSIS MODAL
+   ══════════════════════════════════════════════════════════════════════ */
 #cp-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;align-items:center;justify-content:center}
 #cp-modal-overlay.open{display:flex}
 .cp-modal{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.28);max-width:660px;width:95%;max-height:88vh;overflow-y:auto;animation:modalIn .18s ease}
@@ -177,7 +140,6 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
 .cm-btn-manual:hover{background:#155724}
 .cm-btn-cancel{background:#6c757d;color:#fff}
 .cm-btn-cancel:hover{background:#545b62}
-/* Multi-match option list */
 .mm-list{display:flex;flex-direction:column;gap:6px}
 .mm-opt{padding:10px 13px;border:2px solid #dde;border-radius:7px;cursor:pointer;transition:all .15s;background:#fff}
 .mm-opt:hover{border-color:#2d6a9f;background:#f0f6ff}
@@ -185,212 +147,387 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
 .mm-opt .mm-source{font-size:10px;color:#666;margin-top:2px}
 .mm-opt .mm-days{font-size:10px;color:#2d6a9f;margin-top:1px}
 
-/* Print */
-@media print{#app-header,#setup-panel,#toolbar{display:none!important}#preview-wrap{box-shadow:none;margin:0;border-radius:0}#cp-doc{padding:8px}}
+/* ══════════════════════════════════════════════════════════════════════
+   CP DOCUMENT STYLES (identical to v1)
+   ══════════════════════════════════════════════════════════════════════ */
+.cp-hdr{text-align:center;margin-bottom:10px;border:1px solid #333;padding:8px;background:#fff}
+.cp-hdr .rs1{font-size:13px;font-weight:700;color:#1a3a5c;text-transform:uppercase}
+.cp-hdr .rs2{font-size:13px;color:#1a3a5c;font-weight:600}
+.cp-hdr .cp-title{font-size:14px;font-weight:700;margin-top:6px;text-transform:uppercase;color:#000;letter-spacing:1px}
+.cp-hdr .cp-diag{font-size:13px;font-weight:700;color:#c00;letter-spacing:.5px;margin-top:2px}
+.meta-tbl{width:100%;border-collapse:collapse;margin-bottom:6px;font-size:10px;border:1px solid #888}
+.meta-tbl td{border-right:1px solid #888;padding:3px 8px;vertical-align:middle;white-space:nowrap}
+.meta-tbl td:last-child{border-right:none}
+.meta-tbl label{font-weight:700;color:#555;font-size:9px;text-transform:uppercase;margin-right:6px}
+.mv{display:inline-block;border-bottom:2px dashed #888;min-width:90px;vertical-align:bottom;font-size:10px}
+.pit{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:10px;table-layout:fixed}
+.pit td{border:1px solid #888;padding:3px 6px;vertical-align:top;word-break:break-word}
+.pit .lbl{background:#dce6f1;font-weight:700;word-break:normal}
+.pit .val{}
+.pit .vi{border-bottom:1px solid #888;min-height:18px;padding-bottom:2px;display:block;}
+.cpt{width:100%;border-collapse:collapse;font-size:9.5px;table-layout:fixed}
+.cpt th{background:#1a3a5c;color:#fff;padding:5px 3px;text-align:center;border:1px solid #666;font-size:9px;vertical-align:middle;word-break:break-word}
+.cpt td{border:1px solid #888;padding:2px 4px;vertical-align:top}
+.cpt .kegiatan-td{background:#dce6f1;font-weight:700;text-align:center;vertical-align:middle;font-size:9px;word-break:break-word}
+.cpt .subhdr-td{background:#bdd7ee;font-weight:700;font-size:9px;padding:3px 5px;vertical-align:middle}
+.cpt .uraian-td{font-size:9.5px;min-width:0}
+.cpt .ket-td{font-size:9px;color:#333;min-width:0;word-break:break-word}
+.cpt .day-td{text-align:center;cursor:pointer;user-select:none;position:relative;min-width:0}
+.day-td.req{background:#999999}
+.day-td.opt{background:#e6e6e6}
+.day-td.na{background:#fff}
+.day-td:hover::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.25)}
+[contenteditable]{outline:none;min-height:1em}
+[contenteditable]:focus{background:#fffff0;box-shadow:inset 0 0 0 1px #2d6a9f;border-radius:1px}
+[contenteditable]:empty:not(:focus)::before{content:attr(data-ph);color:#bbb;font-style:italic;pointer-events:none}
+.add-row-btn{display:block;width:100%;padding:2px;border:1px dashed #7aaddd;background:transparent;color:#2d6a9f;cursor:pointer;font-size:9px;text-align:center;border-radius:2px;margin-top:2px}
+.add-row-btn:hover{background:#e8f0fe}
+.del-btn{float:right;background:none;border:none;color:#c00;cursor:pointer;font-size:11px;line-height:1;padding:0 0 0 4px;opacity:.5}
+.del-btn:hover{opacity:1}
+.var-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:10px}
+.var-tbl th{background:#1a3a5c;color:#fff;padding:5px;text-align:center;border:1px solid #666}
+.var-tbl td{border:1px solid #888;padding:4px 6px;height:20px}
+.legend{margin-top:10px;border:1px solid #888;padding:6px 10px;font-size:9.5px}
+.legend strong{font-size:10px;display:block;margin-bottom:4px}
+.legend-tbl{border-collapse:collapse;font-size:9px;margin-top:3px}
+.sw{width:20px;height:11px;border:1px solid #666;}
+.sigs-tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:9.5px;text-align:center}
+.sigs-tbl .sig-hdr{background:#dce6f1;font-weight:700;border:1px solid #888;padding:3px;text-align:center;font-size:9px}
+.sigs-tbl .sig-title{border:1px solid #888;padding:3px;text-align:center;vertical-align:top}
+.sigs-tbl .sig-body{border:1px solid #888;height:40px;text-align:center;vertical-align:bottom;padding:2px 4px}
+.sig-line{border-top:1px solid #333;padding-top:2px}
+.sig-name{font-weight:700}
+.sig-nip{color:#555}
+.warn-ico{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;background:#fff3cd;border:1px solid #ffc107;border-radius:2px;color:#856404;font-size:8px;font-weight:700;cursor:help;margin-right:3px;flex-shrink:0;vertical-align:middle;line-height:1}
+#matchedDiag{display:inline-flex;align-items:center;gap:6px;background:#e3f2fd;border:1px solid #90caf9;border-radius:4px;padding:4px 10px;color:#1565c0;font-size:11px;font-weight:700;margin-left:8px}
+
+/* ══════════════════════════════════════════════════════════════════════
+   PRINT
+   ══════════════════════════════════════════════════════════════════════ */
+@media print{
+  #view-input{display:none!important}
+  #view-output{display:flex!important;height:auto;overflow:visible}
+  #toolbar{display:none!important}
+  #preview-wrap{overflow:visible;flex:none}
+  #cp-doc{padding:8px}
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════ */
+@media(max-width:640px){
+  .fg2,.fg3{grid-template-columns:1fr}
+  .vi-help-btn{position:static;transform:none;margin-top:10px;display:block}
+  .vi-header{padding-bottom:14px}
+}
 </style>
 </head>
 <body>
 
-<!-- APP HEADER -->
-<div id="app-header">
-  <div>
-    <div class="sub">Sistem Pembuatan Dokumen Klinis Berbasis Format Baku</div>
+<!-- ══════════════════════════════════════════════════════════════════════
+     VIEW 1 — INPUT FORM
+     ══════════════════════════════════════════════════════════════════════ -->
+<div id="view-input">
+
+  <!-- Header -->
+  <div class="vi-header">
     <h1>⚕ Clinical Pathway Maker</h1>
+    <p>Sistem Informasi Clinical Pathway — RS Pendidikan</p>
+    <button onclick="openPanduan()" class="vi-help-btn">📖 Panduan</button>
   </div>
-  <div class="ver">v1.0 · Format SNARS/Kemenkes RI</div>
-</div>
 
-<!-- SETUP PANEL -->
-<div id="setup-panel">
-  <div id="setup-toggle" onclick="toggleSetup()">
-    ⚙ PENGATURAN CLINICAL PATHWAY — klik untuk buka/tutup
-    <span id="toggle-icon">▼</span>
-  </div>
-  <div id="setup-body">
+  <!-- Body / Form Cards -->
+  <div class="vi-body">
 
-    <div class="fsec">Informasi Rumah Sakit</div>
-    <div class="fg span2">
-      <label>Nama Rumah Sakit</label>
-      <input id="namaRS" value="Rumah Sakit Pendidikan Prof. Dr. Chairuddin P. Lubis" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Sub-judul / Nama Lembaga</label>
-      <input id="alamatRS" value="Universitas Sumatera Utara" oninput="updatePreview()">
+    <!-- Validation Banner -->
+    <div id="validation-banner">
+      <span>⚠️ Mohon lengkapi kolom yang wajib diisi (★) sebelum melanjutkan.</span>
+      <button onclick="document.getElementById('validation-banner').style.display='none'">✕</button>
     </div>
 
-    <div class="fsec">Identitas Clinical Pathway</div>
-    <div class="fg span2">
-      <label>Nama Diagnosis (Judul CP)</label>
-      <input id="diagnosisTitle" placeholder="Contoh: PLASENTA AKRETA" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Nomor CP</label>
-      <input id="nomorCP" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Tanggal Berlaku</label>
-      <input type="date" id="tglBerlaku" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Nomor Revisi</label>
-      <input id="nomorRevisi" oninput="updatePreview()">
-    </div>
-
-    <div class="fsec">Identitas Pasien</div>
-    <div class="fg span2">
-      <label>Nama Pasien</label>
-      <input id="namaPasien" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Jenis Kelamin</label>
-      <select id="jk" onchange="updatePreview()">
-        <option value="">—</option>
-        <option>Laki-laki</option>
-        <option>Perempuan</option>
-      </select>
-    </div>
-    <div class="fg">
-      <label>Tanggal Lahir</label>
-      <input type="date" id="tglLahir" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>No. Rekam Medik</label>
-      <input id="noRM" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Berat Badan (kg)</label>
-      <input id="bbadan" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Tgl. Masuk RS</label>
-      <input type="date" id="tglMasuk" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Jam Masuk</label>
-      <input type="time" id="jamMasuk" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Tgl. Keluar RS</label>
-      <input type="date" id="tglKeluar" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Lama Rawat</label>
-      <input id="lamaRawat" placeholder="Contoh: 5 hari" oninput="updatePreview()">
-    </div>
-
-    <div class="fsec">Diagnosis & Tindakan</div>
-    <div class="fg span3" style="display:flex;align-items:flex-end;gap:10px">
-      <div style="flex:1">
-        <label style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px">Spesialisasi</label>
-        <select id="specialty" style="padding:5px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;font-family:Arial,sans-serif;width:100%">
-          <option value="">— Pilih Spesialisasi —</option>
-          <option value="*">Semua Spesialisasi</option>
-          <option value="obgin">Obstetri &amp; Ginekologi</option>
-          <option value="penyakit_dalam">Penyakit Dalam</option>
-          <option value="bedah_umum">Bedah Umum</option>
-          <option value="neurologi">Neurologi</option>
-          <option value="kardiologi">Kardiologi</option>
-          <option value="pediatri">Pediatri</option>
-          <option value="ortopedi">Ortopedi</option>
-          <option value="paru">Paru</option>
-          <option value="tht">THT</option>
-          <option value="urologi">Urologi</option>
-          <option value="mata">Mata</option>
-          <option value="kulit">Kulit &amp; Kelamin</option>
-          <option value="bedah_saraf">Bedah Saraf</option>
-          <option value="bedah_vaskular">Bedah Vaskular / Toraks Kardiovaskular</option>
-          <option value="bedah_plastik">Bedah Plastik</option>
-          <option value="bedah_mulut">Bedah Mulut</option>
-        </select>
+    <!-- ─── CARD 1: Identitas Rumah Sakit ─── -->
+    <div class="vi-card">
+      <div class="vi-card-header">🏥 1. Identitas Rumah Sakit</div>
+      <div class="vi-card-body">
+        <div class="fg2">
+          <div class="fg fg-full">
+            <label>
+              <span class="req-star">★</span> Nama Rumah Sakit
+              <span class="req-badge">Wajib</span>
+            </label>
+            <input id="namaRS" value="Rumah Sakit Pendidikan Prof. Dr. Chairuddin P. Lubis"
+              oninput="clearError('namaRS')">
+            <span class="err-msg" id="err-namaRS">⚠ Nama Rumah Sakit harus diisi</span>
+          </div>
+          <div class="fg">
+            <label>Sub-judul / Nama Lembaga</label>
+            <input id="alamatRS" value="Universitas Sumatera Utara">
+          </div>
+          <div class="fg">
+            <label>Kota RS</label>
+            <input id="kotaRS" placeholder="Contoh: Medan">
+          </div>
+        </div>
       </div>
     </div>
-    <div class="fg span2">
-      <label>Diagnosa Utama + Kode ICD-10</label>
-      <input id="diagUtama" placeholder="Contoh: Plasenta Akreta / O43.2" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Diagnosa Penyerta</label>
-      <input id="diagPenyerta" oninput="updatePreview()">
-    </div>
-    <div class="fg span2">
-      <label>Tindakan Utama + Kode ICD-9</label>
-      <input id="tindakanUtama" placeholder="Contoh: SC (ICD-9: 74.1) ± TAH (ICD-9: 68.4)" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Komplikasi</label>
-      <input id="komplikasi" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Rencana Rawat</label>
-      <input id="rencanaRawat" placeholder="Contoh: 5 Hari" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Ruang Rawat / Kelas</label>
-      <input id="ruangRawat" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Rujukan</label>
-      <select id="rujukan" onchange="updatePreview()">
-        <option>Ya / Tidak</option><option>Ya</option><option>Tidak</option>
-      </select>
-    </div>
-    <div class="fg">
-      <label>Tanggal Operasi</label>
-      <input type="date" id="tglOperasi" oninput="updatePreview()">
+
+    <!-- ─── CARD 2: Informasi Clinical Pathway ─── -->
+    <div class="vi-card">
+      <div class="vi-card-header">📋 2. Informasi Clinical Pathway</div>
+      <div class="vi-card-body">
+        <div class="fg3">
+          <div class="fg">
+            <label>Nomor CP</label>
+            <input id="nomorCP">
+          </div>
+          <div class="fg">
+            <label>Tanggal Berlaku</label>
+            <input type="date" id="tglBerlaku">
+          </div>
+          <div class="fg">
+            <label>Nomor Revisi</label>
+            <input id="nomorRevisi">
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- PROSES BUTTON -->
-    <div class="span3" style="padding:6px 0 2px;display:flex;align-items:center;flex-wrap:wrap;gap:8px">
-      <button class="btn-process" onclick="processCP()">
-        ⚡ Proses — Sesuaikan Isi CP Berdasarkan Diagnosis &amp; Guideline
-      </button>
-      <span id="matchedDiag" style="display:none"></span>
+    <!-- ─── CARD 3: Diagnosis & Template ─── -->
+    <div class="vi-card">
+      <div class="vi-card-header">🔍 3. Diagnosis &amp; Template</div>
+      <div class="vi-card-body">
+        <div class="fg2">
+          <div class="fg fg-full">
+            <label>Spesialisasi</label>
+            <select id="specialty">
+              <option value="">— Pilih Spesialisasi —</option>
+              <option value="*">Semua Spesialisasi</option>
+              <option value="obgin">Obstetri &amp; Ginekologi</option>
+              <option value="penyakit_dalam">Penyakit Dalam</option>
+              <option value="bedah_umum">Bedah Umum</option>
+              <option value="neurologi">Neurologi</option>
+              <option value="kardiologi">Kardiologi</option>
+              <option value="pediatri">Pediatri</option>
+              <option value="ortopedi">Ortopedi</option>
+              <option value="paru">Paru</option>
+              <option value="tht">THT</option>
+              <option value="urologi">Urologi</option>
+              <option value="mata">Mata</option>
+              <option value="kulit">Kulit &amp; Kelamin</option>
+              <option value="bedah_saraf">Bedah Saraf</option>
+              <option value="bedah_vaskular">Bedah Vaskular / Toraks Kardiovaskular</option>
+              <option value="bedah_plastik">Bedah Plastik</option>
+              <option value="bedah_mulut">Bedah Mulut</option>
+            </select>
+          </div>
+          <div class="fg fg-full">
+            <label>
+              <span class="req-star">★</span> Judul CP / Nama Diagnosis (tampil di header dokumen)
+              <span class="req-badge">Wajib</span>
+            </label>
+            <input id="diagnosisTitle" placeholder="Contoh: PLASENTA AKRETA / SC BERULANG"
+              oninput="clearError('diagnosisTitle')">
+            <span class="err-msg" id="err-diagnosisTitle">⚠ Judul CP / Nama Diagnosis harus diisi</span>
+          </div>
+          <div class="fg">
+            <label>
+              <span class="req-star">★</span> Diagnosa Utama + Kode ICD-10
+              <span class="req-badge">Wajib</span>
+            </label>
+            <input id="diagUtama" placeholder="Contoh: Plasenta Akreta / O43.2"
+              oninput="clearError('diagUtama')">
+            <span class="err-msg" id="err-diagUtama">⚠ Diagnosa Utama harus diisi</span>
+          </div>
+          <div class="fg">
+            <label>Diagnosa Penyerta</label>
+            <input id="diagPenyerta">
+          </div>
+          <div class="fg">
+            <label>Tindakan Utama + Kode ICD-9</label>
+            <input id="tindakanUtama" placeholder="Contoh: SC (ICD-9: 74.1) ± TAH (ICD-9: 68.4)">
+          </div>
+          <div class="fg">
+            <label>Komplikasi</label>
+            <input id="komplikasi">
+          </div>
+          <div class="fg">
+            <label>Rencana Rawat</label>
+            <input id="rencanaRawat" placeholder="Contoh: 5 Hari">
+          </div>
+          <div class="fg">
+            <label>Ruang Rawat / Kelas</label>
+            <input id="ruangRawat">
+          </div>
+          <div class="fg">
+            <label>
+              <span class="req-star">★</span> Jumlah Hari Rawat
+              <span class="req-badge">Wajib</span>
+            </label>
+            <input type="number" id="numDays" value="5" min="1" max="30"
+              onchange="onNumDaysChange()" oninput="clearError('numDays')">
+            <span class="err-msg" id="err-numDays">⚠ Jumlah Hari Rawat harus diisi</span>
+          </div>
+          <div class="fg">
+            <label>Rujukan</label>
+            <select id="rujukan">
+              <option>Ya / Tidak</option><option>Ya</option><option>Tidak</option>
+            </select>
+          </div>
+        </div>
+        <!-- Day Labels -->
+        <div style="margin-top:12px">
+          <div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px">Label Kolom Hari</div>
+          <div id="dayLabelsWrap"></div>
+        </div>
+        <!-- Matched Diag indicator -->
+        <span id="matchedDiag" style="display:none;margin-top:10px"></span>
+      </div>
     </div>
 
-    <div class="fsec">Konfigurasi Hari Rawat</div>
-    <div class="fg">
-      <label>Jumlah Hari Rawat</label>
-      <input type="number" id="numDays" value="5" min="1" max="30" onchange="onNumDaysChange()">
+    <!-- ─── CARD 4: Data Pasien ─── -->
+    <div class="vi-card">
+      <div class="vi-card-header">👤 4. Data Pasien <small style="opacity:.7;font-weight:400;font-size:10px">(opsional)</small></div>
+      <div class="vi-card-body">
+        <div class="fg3">
+          <div class="fg">
+            <label>Nama Pasien</label>
+            <input id="namaPasien">
+          </div>
+          <div class="fg">
+            <label>Jenis Kelamin</label>
+            <select id="jk">
+              <option value="">—</option>
+              <option>Laki-laki</option>
+              <option>Perempuan</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Tanggal Lahir</label>
+            <input type="date" id="tglLahir">
+          </div>
+          <div class="fg">
+            <label>No. Rekam Medik</label>
+            <input id="noRM">
+          </div>
+          <div class="fg">
+            <label>Berat Badan (kg)</label>
+            <input id="bbadan">
+          </div>
+          <div class="fg">
+            <label>Tgl. Masuk RS</label>
+            <input type="date" id="tglMasuk">
+          </div>
+          <div class="fg">
+            <label>Jam Masuk</label>
+            <input type="time" id="jamMasuk">
+          </div>
+          <div class="fg">
+            <label>Tgl. Keluar RS</label>
+            <input type="date" id="tglKeluar">
+          </div>
+          <div class="fg">
+            <label>Lama Rawat</label>
+            <input id="lamaRawat" placeholder="Contoh: 5 hari">
+          </div>
+          <div class="fg">
+            <label>Tanggal Operasi</label>
+            <input type="date" id="tglOperasi">
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="dayLabelsWrap" style="grid-column:span 2;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end"></div>
 
-    <div class="fsec">Data Pengesahan</div>
-    <div class="fg">
-      <label>Kota</label>
-      <input id="kotaSah" value="Medan" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>Tanggal Pengesahan</label>
-      <input type="date" id="tglSah" oninput="updatePreview()">
-    </div>
-    <div class="fg"></div>
-    <div class="fg">
-      <label>Nama Ketua Komite Medik</label>
-      <input id="namaKomite" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>NIP Ketua Komite Medik</label>
-      <input id="nipKomite" oninput="updatePreview()">
-    </div>
-    <div class="fg"></div>
-    <div class="fg">
-      <label>Nama Direktur Utama</label>
-      <input id="namaDirektur" oninput="updatePreview()">
-    </div>
-    <div class="fg">
-      <label>NIP Direktur Utama</label>
-      <input id="nipDirektur" oninput="updatePreview()">
+    <!-- ─── CARD 5: Pengesahan & Pejabat ─── -->
+    <div class="vi-card">
+      <div class="vi-card-header">✍️ 5. Pengesahan &amp; Pejabat</div>
+      <div class="vi-card-body">
+        <div class="fg3">
+          <div class="fg">
+            <label>Kota Pengesahan</label>
+            <input id="kotaSah" value="Medan">
+          </div>
+          <div class="fg">
+            <label>Tanggal Pengesahan</label>
+            <input type="date" id="tglSah">
+          </div>
+          <div class="fg"></div>
+          <div class="fg">
+            <label>
+              <span class="req-star">★</span> Nama Ketua Komite Medik
+              <span class="req-badge">Wajib</span>
+            </label>
+            <input id="namaKomite" oninput="clearError('namaKomite')">
+            <span class="err-msg" id="err-namaKomite">⚠ Nama Ketua Komite Medik harus diisi</span>
+          </div>
+          <div class="fg">
+            <label>NIP Ketua Komite Medik</label>
+            <input id="nipKomite">
+          </div>
+          <div class="fg"></div>
+          <div class="fg">
+            <label>
+              <span class="req-star">★</span> Nama Direktur Utama
+              <span class="req-badge">Wajib</span>
+            </label>
+            <input id="namaDirektur" oninput="clearError('namaDirektur')">
+            <span class="err-msg" id="err-namaDirektur">⚠ Nama Direktur Utama harus diisi</span>
+          </div>
+          <div class="fg">
+            <label>NIP Direktur Utama</label>
+            <input id="nipDirektur">
+          </div>
+        </div>
+      </div>
     </div>
 
-  </div><!-- /setup-body -->
-</div><!-- /setup-panel -->
+  </div><!-- /vi-body -->
 
-<!-- MODAL OVERLAY -->
+  <!-- Footer CTA -->
+  <div class="vi-footer">
+    <button id="btn-build" onclick="buildCP()">⚡ Buat Clinical Pathway</button>
+  </div>
+
+</div><!-- /view-input -->
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     VIEW 2 — OUTPUT / PREVIEW
+     ══════════════════════════════════════════════════════════════════════ -->
+<div id="view-output">
+
+  <div id="toolbar">
+    <button class="btn btn-back" onclick="goToInput()">← Kembali ke Input</button>
+    <button class="btn btn-export" onclick="exportDocx()">⬇ Export Word (.doc)</button>
+    <button class="btn btn-print" onclick="window.print()">🖨 Print</button>
+    <button class="btn btn-reset" onclick="confirmReset()">↺ Reset Isi CP</button>
+    <button class="btn btn-help" onclick="openPanduan()">📖 Panduan</button>
+    <span class="hint">
+      Klik sel hari untuk ubah status:
+      <span style="background:#999999;color:#fff">Wajib</span>→
+      <span style="background:#e6e6e6">Boleh</span>→
+      <span style="background:#fff">Tidak Berlaku</span>
+    </span>
+    <span class="hint" style="margin-left:8px">
+      <span class="warn-ico" style="display:inline-flex;vertical-align:middle">!</span>
+      = Bukti literatur terbatas — verifikasi dengan guideline institusi
+    </span>
+  </div>
+
+  <div id="preview-wrap">
+    <div id="cp-doc"></div>
+  </div>
+
+</div><!-- /view-output -->
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     MODAL OVERLAY (Diagnosis match)
+     ══════════════════════════════════════════════════════════════════════ -->
 <div id="cp-modal-overlay">
   <div class="cp-modal" id="cp-modal-inner"></div>
 </div>
 
-<!-- ── PANDUAN MODAL ── -->
+<!-- ══════════════════════════════════════════════════════════════════════
+     PANDUAN MODAL
+     ══════════════════════════════════════════════════════════════════════ -->
 <div id="panduan-overlay" onclick="if(event.target===this)closePanduan()">
   <div id="panduan-modal">
     <div class="panduan-head">
@@ -532,27 +669,8 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
     </div><!-- .panduan-body -->
   </div><!-- #panduan-modal -->
 </div><!-- #panduan-overlay -->
-
-<!-- PREVIEW AREA -->
-<div id="preview-wrap">
-  <div id="toolbar">
-    <button class="btn btn-export" onclick="exportDocx()">⬇ Export Word (.doc)</button>
-    <button class="btn btn-print" onclick="window.print()">🖨 Print</button>
-    <button class="btn btn-reset" onclick="confirmReset()">↺ Reset Isi CP</button>
-    <button class="btn btn-help" onclick="openPanduan()">📖 Panduan</button>
-    <span class="hint">
-      Klik sel hari untuk ubah status:
-      <span style="background:#999999;color:#fff">Wajib</span>→
-      <span style="background:#e6e6e6">Boleh</span>→
-      <span style="background:#fff">Tidak Berlaku</span>
-    </span>
-    <span class="hint" style="margin-left:8px">
-      <span class="warn-ico" style="display:inline-flex;vertical-align:middle">!</span>
-      = Bukti literatur terbatas — verifikasi dengan guideline institusi
-    </span>
-  </div>
-  <div id="cp-doc"></div>
-</div>
+  </div><!-- #panduan-modal -->
+</div><!-- #panduan-overlay -->
 
 <script>
 /* =====================================================================
@@ -565,14 +683,10 @@ let NUM_DAYS = 5;
 let sections = [];
 
 /* =====================================================================
-   SETUP PANEL TOGGLE
+   SETUP PANEL TOGGLE (kept for v1 compatibility — no-op in v2)
    ===================================================================== */
-let setupOpen = true;
-function toggleSetup(){
-  setupOpen = !setupOpen;
-  document.getElementById('setup-body').style.display = setupOpen ? 'grid' : 'none';
-  document.getElementById('toggle-icon').textContent = setupOpen ? '▲' : '▼';
-}
+let setupOpen = false;
+function toggleSetup(){ /* no-op in v2 */ }
 
 /* =====================================================================
    HELPERS
@@ -7455,12 +7569,12 @@ function applyTemplate(match){
   el.innerHTML = `✅ ${match.label} · ${match.source}`;
 
   renderAll();
-  if(setupOpen) toggleSetup();
-  document.getElementById('preview-wrap').scrollIntoView({behavior:'smooth'});
+  // In v2, applyTemplate is called from within the view-output context (toolbar Reset / re-process)
+  // Navigation is handled by applyTemplateAndSwitch or useDefaultAndSwitch
 }
 
 /* =====================================================================
-   PROCESS CP — Main action when "Proses" button clicked
+   PROCESS CP — Main action when "Proses" button clicked (kept for compatibility)
    ===================================================================== */
 function processCP(){
   const diagText    = fv('diagnosisTitle') + ' ' + fv('diagUtama');
@@ -7487,6 +7601,224 @@ function init(){
   const defaults = ['Pre-Op','Operasi','Post-Op','Post-Op','Post-Op'];
   inputs.forEach((inp,i)=>{ if(defaults[i]) inp.value=defaults[i]; });
   renderAll();
+}
+
+window.addEventListener('DOMContentLoaded', init);
+
+/* =====================================================================
+   V2 NAVIGATION & VALIDATION
+   ===================================================================== */
+
+/* Clear individual field error on input */
+function clearError(id){
+  const el = document.getElementById(id);
+  const errEl = document.getElementById('err-' + id);
+  if(el) el.classList.remove('input-error');
+  if(errEl) errEl.style.display = 'none';
+}
+
+/* Build CP — validate then process and switch to output view */
+function buildCP(){
+  const REQUIRED = [
+    {id:'namaRS',         label:'Nama Rumah Sakit'},
+    {id:'diagnosisTitle', label:'Judul CP / Nama Diagnosis'},
+    {id:'diagUtama',      label:'Diagnosa Utama'},
+    {id:'numDays',        label:'Jumlah Hari Rawat'},
+    {id:'namaKomite',     label:'Nama Ketua Komite Medik'},
+    {id:'namaDirektur',   label:'Nama Direktur Utama'},
+  ];
+
+  let errors = [];
+  REQUIRED.forEach(f => {
+    const el = document.getElementById(f.id);
+    const val = el ? el.value.trim() : '';
+    const errEl = document.getElementById('err-' + f.id);
+    if(!val){
+      if(el) el.classList.add('input-error');
+      if(errEl) errEl.style.display = 'block';
+      errors.push(f);
+    } else {
+      if(el) el.classList.remove('input-error');
+      if(errEl) errEl.style.display = 'none';
+    }
+  });
+
+  if(errors.length > 0){
+    const banner = document.getElementById('validation-banner');
+    if(banner) banner.style.display = 'flex';
+    const firstErrEl = document.getElementById(errors[0].id);
+    if(firstErrEl) firstErrEl.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  // Hide banner if shown
+  const banner = document.getElementById('validation-banner');
+  if(banner) banner.style.display = 'none';
+
+  // Process CP — match diagnosis, apply template or use current sections
+  processCP_build();
+}
+
+/* processCP_build is the same as processCP but after success it switches view */
+function processCP_build(){
+  const diagText     = fv('diagnosisTitle') + ' ' + fv('diagUtama');
+  const tindakanText = fv('tindakanUtama');
+  const specialty    = fv('specialty');
+
+  const result = matchDiagnosis(diagText, tindakanText, specialty);
+
+  if(result.type === 'none'){
+    // No template found — still proceed with default sections
+    // but show the no-match info panel then switch view
+    showNoMatchPanelV2(diagText);
+    return;
+  }
+  if(result.type === 'multi'){
+    showMultiMatchPanelV2(result.matches);
+    return;
+  }
+  // Single match
+  applyTemplateAndSwitch(result.match);
+}
+
+function applyTemplateAndSwitch(match){
+  const confirmMsg = `Template CP ditemukan:\n\n📋 ${match.label}\n📚 Sumber: ${match.source}\n\nJumlah hari rawat: ${match.defaultDays} hari\nLabel hari: ${match.defaultLabels.join(', ')}\n\nLanjutkan? Isi CP saat ini akan diganti dengan template berdasarkan guideline.`;
+  if(!confirm(confirmMsg)) return;
+
+  NUM_DAYS = match.defaultDays;
+  document.getElementById('numDays').value = NUM_DAYS;
+  buildDayLabelsUI(NUM_DAYS);
+  const inputs = document.getElementById('dayLabelsWrap').querySelectorAll('input');
+  inputs.forEach((inp,i)=>{ if(match.defaultLabels[i]!==undefined) inp.value=match.defaultLabels[i]; });
+
+  ROW_ID = 1000;
+  if(match.buildFn){
+    sections = match.buildFn(NUM_DAYS);
+  } else {
+    ROW_ID = 1;
+    sections = buildDefaultSections();
+  }
+
+  const el = document.getElementById('matchedDiag');
+  el.style.display = 'inline-flex';
+  el.innerHTML = `✅ ${match.label} · ${match.source}`;
+
+  renderAll();
+  switchToOutput();
+}
+
+function showNoMatchPanelV2(diagText){
+  const q  = encodeURIComponent((diagText||'clinical pathway').trim() + ' clinical pathway guideline');
+  const qW = encodeURIComponent((diagText||'').trim());
+  const html = `
+  <div class="cm-head">
+    <div>
+      <h3>⚠️ Template Tidak Ditemukan</h3>
+      <div class="cm-sub">Diagnosis tidak cocok — CP akan dibuat dengan template default</div>
+    </div>
+    <button class="cm-close" onclick="closeModal()">×</button>
+  </div>
+  <div class="cm-body">
+    <div class="cm-note">
+      <b>Diagnosis yang dimasukkan:</b>
+      "${esc(diagText)}"<br><br>
+      Tidak ada template CP yang sesuai. CP akan dibuat dengan template default yang dapat
+      Anda edit secara manual. Cari guideline melalui sumber di bawah untuk referensi pengisian.
+    </div>
+    <div class="cm-sec-title">Cari Referensi Guideline</div>
+    <div class="cm-links">
+      <a class="cm-lnk" href="https://pubmed.ncbi.nlm.nih.gov/?term=${q}&filter=pubt.guideline&filter=pubt.systematicreview" target="_blank">
+        <span class="cl-icon">🔬</span>
+        <div><div class="cl-lbl">PubMed — Guideline &amp; Systematic Review</div>
+        <div class="cl-desc">National Library of Medicine (NIH) · Gratis · Terindeks internasional</div></div>
+      </a>
+      <a class="cm-lnk" href="https://www.who.int/publications/i/search#q=${qW}&defaultWorkflow=Publications" target="_blank">
+        <span class="cl-icon">🌍</span>
+        <div><div class="cl-lbl">WHO Publications</div>
+        <div class="cl-desc">Guideline dan rekomendasi resmi dari World Health Organization</div></div>
+      </a>
+      <a class="cm-lnk" href="https://yankes.kemkes.go.id/index.php/index/category_produk/23" target="_blank">
+        <span class="cl-icon">🇮🇩</span>
+        <div><div class="cl-lbl">PNPK Kemenkes RI</div>
+        <div class="cl-desc">Panduan Nasional Pelayanan Kedokteran — Kementerian Kesehatan RI</div></div>
+      </a>
+    </div>
+    <div class="cm-divider"></div>
+    <div class="cm-actions">
+      <button class="cm-btn cm-btn-manual" onclick="closeModal();useDefaultAndSwitch()">✏️ Gunakan Template Default &amp; Lanjutkan</button>
+      <button class="cm-btn cm-btn-cancel" onclick="closeModal()">Kembali ke Input</button>
+    </div>
+  </div>`;
+  openModal(html);
+}
+
+function useDefaultAndSwitch(){
+  ROW_ID = 1;
+  sections = buildDefaultSections();
+  renderAll();
+  switchToOutput();
+}
+
+function showMultiMatchPanelV2(matches){
+  const items = matches.map(m=>`
+    <div class="mm-opt" onclick="closeModal();applyTemplateAndSwitch(DIAG_CATALOG.find(c=>c.id==='${m.id}'))">
+      <div class="mm-label">${esc(m.label)}</div>
+      <div class="mm-source">📚 ${esc(m.source)}</div>
+      <div class="mm-days">🗓 ${m.defaultDays} hari · ${m.defaultLabels.join(' · ')}</div>
+    </div>`).join('');
+  const html = `
+  <div class="cm-head">
+    <div>
+      <h3>🔍 Beberapa Template Cocok</h3>
+      <div class="cm-sub">Pilih template yang sesuai dengan rencana tindakan</div>
+    </div>
+    <button class="cm-close" onclick="closeModal()">×</button>
+  </div>
+  <div class="cm-body">
+    <div class="cm-note">
+      <b>Ditemukan ${matches.length} template dengan skor yang sama.</b><br>
+      Pilih template yang sesuai, atau lengkapi kolom <b>Tindakan Utama</b> agar sistem
+      dapat memilih otomatis.
+    </div>
+    <div class="mm-list">${items}</div>
+    <div class="cm-divider"></div>
+    <div class="cm-actions">
+      <button class="cm-btn cm-btn-cancel" onclick="closeModal()">Batal</button>
+    </div>
+  </div>`;
+  openModal(html);
+}
+
+/* Switch to output view */
+function switchToOutput(){
+  document.getElementById('view-input').style.display = 'none';
+  document.getElementById('view-output').style.display = 'flex';
+  document.getElementById('view-output').style.flexDirection = 'column';
+  window.scrollTo(0,0);
+  document.getElementById('preview-wrap').scrollTop = 0;
+}
+
+/* Go back to input view */
+function goToInput(){
+  document.getElementById('view-output').style.display = 'none';
+  document.getElementById('view-input').style.display = 'flex';
+  document.getElementById('view-input').style.flexDirection = 'column';
+  window.scrollTo(0,0);
+}
+
+/* =====================================================================
+   V2 INIT — same as v1 but no toggleSetup, no auto-render on build
+   ===================================================================== */
+function init(){
+  ROW_ID = 1;
+  sections = buildDefaultSections();
+  NUM_DAYS = 5;
+  buildDayLabelsUI(5);
+  // Set default day labels
+  const inputs = document.getElementById('dayLabelsWrap').querySelectorAll('input');
+  const defaults = ['Pre-Op','Operasi','Post-Op','Post-Op','Post-Op'];
+  inputs.forEach((inp,i)=>{ if(defaults[i]) inp.value=defaults[i]; });
+  // In v2 we do NOT auto-render; output is only shown when user clicks "Buat CP"
 }
 
 window.addEventListener('DOMContentLoaded', init);
