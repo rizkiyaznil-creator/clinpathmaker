@@ -752,7 +752,16 @@ function syncFromDOM(){
     if(!sec) return;
     const row = sec.rows.find(r=>r.id===rid);
     if(!row) return;
-    row[f] = el.innerText.trim();
+    // The uraian cell embeds UI-only elements (delete button "×" and warning
+    // icon "!") inside the same contenteditable region. Reading their glyphs
+    // back would leak them into the stored text, and each re-render prepends a
+    // fresh "×" — stacking up on every edit. Strip them from a clone first.
+    let src = el;
+    if(el.querySelector('.del-btn, .warn-ico')){
+      src = el.cloneNode(true);
+      src.querySelectorAll('.del-btn, .warn-ico').forEach(n=>n.remove());
+    }
+    row[f] = src.innerText.trim();
   });
 }
 
