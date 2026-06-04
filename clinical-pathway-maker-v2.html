@@ -171,6 +171,7 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
 .cpt .kegiatan-td{background:#dce6f1;font-weight:700;text-align:center;vertical-align:middle;font-size:9px;word-break:break-word}
 .cpt .subhdr-td{background:#bdd7ee;font-weight:700;font-size:9px;padding:3px 5px;vertical-align:middle}
 .cpt .uraian-td{font-size:9.5px;min-width:0}
+.cpt .uraian-edit{display:block;min-height:1.2em;outline:none;word-break:break-word}
 .cpt .ket-td{font-size:9px;color:#333;min-width:0;word-break:break-word}
 .cpt .day-td{text-align:center;cursor:pointer;user-select:none;position:relative;min-width:0}
 .day-td.req{background:#999999}
@@ -1149,9 +1150,7 @@ function renderAll(){
                contenteditable="true" data-ph="Judul Sub-bagian...">${esc(row.uraian)}</td>`;
       } else {
         const warnIco = row.warn ? `<span class="warn-ico no-export" contenteditable="false" title="⚠️ Bukti literatur terbatas — verifikasi dengan guideline institusi Anda">!</span>` : '';
-        h += `<td class="uraian-td"
-               data-rid="${row.id}" data-sid="${sec.id}" data-f="uraian"
-               contenteditable="true" data-ph="Uraian kegiatan...">${warnIco}${esc(row.uraian)}<span class="del-wrap" style="float:right" contenteditable="false"><button class="del-btn" onclick="deleteRow(${sec.id},${row.id})" title="Hapus baris">×</button></span></td>`;
+        h += `<td class="uraian-td"><span class="del-wrap no-export" style="float:right" contenteditable="false"><button class="del-btn" onclick="deleteRow(${sec.id},${row.id})" title="Hapus baris">×</button></span><span class="uraian-edit" data-rid="${row.id}" data-sid="${sec.id}" data-f="uraian" contenteditable="true" data-ph="Uraian kegiatan...">${warnIco}${esc(row.uraian)}</span></td>`;
         // Day cells
         row.days.forEach((d,di)=>{
           const cls = d===2?'req':d===1?'opt':'na';
