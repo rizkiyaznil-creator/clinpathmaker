@@ -8620,11 +8620,16 @@ function showMultiMatchPanel(matches){
 /* =====================================================================
    APPLY TEMPLATE — dipanggil setelah match tunggal atau pilihan multi
    ===================================================================== */
+function userDaysOr(fallback){
+  const u = parseInt(document.getElementById('numDays').value, 10);
+  return (u >= 1 && u <= 30) ? u : fallback;
+}
+
 function applyTemplate(match){
-  const confirmMsg = `Template CP ditemukan:\n\n📋 ${match.label}\n📚 Sumber: ${match.source}\n\nJumlah hari rawat: ${match.defaultDays} hari\nLabel hari: ${match.defaultLabels.join(', ')}\n\nLanjutkan? Isi CP saat ini akan diganti dengan template berdasarkan guideline.`;
+  const confirmMsg = `Template CP ditemukan:\n\n📋 ${match.label}\n📚 Sumber: ${match.source}\n\nJumlah hari rawat: ${userDaysOr(match.defaultDays)} hari (sesuai input Anda; panduan: ${match.defaultDays} hari)\nLabel hari: ${match.defaultLabels.slice(0, userDaysOr(match.defaultDays)).join(', ')}\n\nLanjutkan? Isi CP saat ini akan diganti dengan template berdasarkan guideline.`;
   if(!confirm(confirmMsg)) return;
 
-  NUM_DAYS = match.defaultDays;
+  NUM_DAYS = userDaysOr(match.defaultDays);
   document.getElementById('numDays').value = NUM_DAYS;
   buildDayLabelsUI(NUM_DAYS);
   const inputs = document.getElementById('dayLabelsWrap').querySelectorAll('input');
@@ -8756,10 +8761,10 @@ function processCP_build(){
 }
 
 function applyTemplateAndSwitch(match){
-  const confirmMsg = `Template CP ditemukan:\n\n📋 ${match.label}\n📚 Sumber: ${match.source}\n\nJumlah hari rawat: ${match.defaultDays} hari\nLabel hari: ${match.defaultLabels.join(', ')}\n\nLanjutkan? Isi CP saat ini akan diganti dengan template berdasarkan guideline.`;
+  const confirmMsg = `Template CP ditemukan:\n\n📋 ${match.label}\n📚 Sumber: ${match.source}\n\nJumlah hari rawat: ${userDaysOr(match.defaultDays)} hari (sesuai input Anda; panduan: ${match.defaultDays} hari)\nLabel hari: ${match.defaultLabels.slice(0, userDaysOr(match.defaultDays)).join(', ')}\n\nLanjutkan? Isi CP saat ini akan diganti dengan template berdasarkan guideline.`;
   if(!confirm(confirmMsg)) return;
 
-  NUM_DAYS = match.defaultDays;
+  NUM_DAYS = userDaysOr(match.defaultDays);
   document.getElementById('numDays').value = NUM_DAYS;
   buildDayLabelsUI(NUM_DAYS);
   const inputs = document.getElementById('dayLabelsWrap').querySelectorAll('input');
