@@ -1148,11 +1148,10 @@ function renderAll(){
                data-rid="${row.id}" data-sid="${sec.id}" data-f="uraian"
                contenteditable="true" data-ph="Judul Sub-bagian...">${esc(row.uraian)}</td>`;
       } else {
-        const warnIco = row.warn ? `<span class="warn-ico no-export" title="⚠️ Bukti literatur terbatas — verifikasi dengan guideline institusi Anda">!</span>` : '';
+        const warnIco = row.warn ? `<span class="warn-ico no-export" contenteditable="false" title="⚠️ Bukti literatur terbatas — verifikasi dengan guideline institusi Anda">!</span>` : '';
         h += `<td class="uraian-td"
                data-rid="${row.id}" data-sid="${sec.id}" data-f="uraian"
-               contenteditable="true" data-ph="Uraian kegiatan...">
-               <span style="float:right"><button class="del-btn" onclick="deleteRow(${sec.id},${row.id})" title="Hapus baris">×</button></span>${warnIco}${esc(row.uraian)}</td>`;
+               contenteditable="true" data-ph="Uraian kegiatan...">${warnIco}${esc(row.uraian)}<span class="del-wrap" style="float:right" contenteditable="false"><button class="del-btn" onclick="deleteRow(${sec.id},${row.id})" title="Hapus baris">×</button></span></td>`;
         // Day cells
         row.days.forEach((d,di)=>{
           const cls = d===2?'req':d===1?'opt':'na';
