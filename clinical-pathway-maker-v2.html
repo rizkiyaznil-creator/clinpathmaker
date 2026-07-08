@@ -560,9 +560,9 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
       </table>
       <p style="font-size:10px;color:#666;margin:0 0 4px"><strong>(√)</strong> = tanda centang manual yang diisikan perawat/dokter pada dokumen fisik setelah tindakan dilakukan.</p>
 
-      <h2>📋 Katalog Diagnosis Tersedia <span class="badge">57 template · 16 spesialisasi</span></h2>
+      <h2>📋 Katalog Diagnosis Tersedia <span class="badge">59 template · 16 spesialisasi</span></h2>
 
-      <h3>🤰 Obstetri &amp; Ginekologi <span class="badge">20</span></h3>
+      <h3>🤰 Obstetri &amp; Ginekologi <span class="badge">22</span></h3>
       <div class="sp-grid">
         <div class="sp-item"><span class="sp-name">SC Berulang</span> (Previous SC + Rencana SC)</div>
         <div class="sp-item"><span class="sp-name">Plasenta Akreta</span> / Inkreta / Perkreta</div>
@@ -584,6 +584,8 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#eef1f5;color:#222}
         <div class="sp-item"><span class="sp-name">Mioma Uteri — Miomektomi</span> (fertility-sparing)</div>
         <div class="sp-item"><span class="sp-name">Adenomiosis — Histerektomi</span> (TAH)</div>
         <div class="sp-item"><span class="sp-name">Adenomiosis — Reseksi</span> (adenomiomektomi)</div>
+        <div class="sp-item"><span class="sp-name">Kista Ovarium — TAH-BSO</span> (histerektomi + salpingo-ooforektomi bilateral)</div>
+        <div class="sp-item"><span class="sp-name">Kista Ovarium — Kistektomi / SO</span> (laparotomi, fertility-sparing)</div>
       </div>
 
       <h3>🩺 Penyakit Dalam <span class="badge">8</span></h3>
@@ -8496,6 +8498,355 @@ function tpl_adenomiosis_reseksi(nd){
   ];
 }
 
+// ══════════════════════════════════════════════════════════════════════
+// GINEKOLOGI BENIGNA (OVARIUM) — KISTA / NEOPLASMA OVARIUM (presumed jinak)
+// ══════════════════════════════════════════════════════════════════════
+
+// ──────────────────────────────────────────────────────────────────────
+// TEMPLATE: KISTA OVARIUM — HISTEREKTOMI TOTAL + SALPINGO-OOFOREKTOMI BILATERAL (TAH-BSO)
+// Ref: PPK POGI/HIFERI · ACOG PB 174 (Adnexal Mass) · RCOG GTG 62 · IOTA/O-RADS
+// nd=4: Pre-Op, Operasi, Post-Op 1, Post-Op 2
+// ──────────────────────────────────────────────────────────────────────
+function tpl_kista_tahbso(nd){
+  const r=mkRow, s=mkSub, rw=(u,k,p,n)=>({...mkRow(u,k,p,n),warn:true});
+  return [
+    {id:newId(),title:'1. ASESMEN AWAL',rows:[
+      s('ASESMEN AWAL MEDIS'),
+      r('Dokter Sp.OG (DPJP)','Anamnesis: nyeri/rasa penuh perut bawah, gangguan haid, teraba massa; evaluasi ukuran & karakter kista adneksa',[2,0,0,0],nd),
+      r('Dokter IGD / Poliklinik','Pasien masuk via poli / rujukan',[2,0,0,0],nd),
+      s('ASESMEN AWAL KEPERAWATAN / KEBIDANAN'),
+      r('Bidan / Perawat Primer','Kondisi umum, TTV, riwayat alergi, skrining gizi & nyeri',[2,0,0,0],nd),
+    ]},
+    {id:newId(),title:'2. LABORATORIUM',rows:[
+      r('Darah Rutin (Hb, Leukosit, Trombosit, Ht)','Pre-Op & post-op',[2,0,2,0],nd),
+      r('Golongan Darah + Cross Match','Standby darah ≥ 2 kantong (PRC)',[2,0,0,0],nd),
+      r('Hemostasis (CT/BT, PT/aPTT)','Pre-Op',[2,0,0,0],nd),
+      r('Fungsi Ginjal (Ureum, Kreatinin) & Elektrolit','Pre-Op',[2,0,1,0],nd),
+      r('Fungsi Hati (SGOT, SGPT), Albumin','Pre-Op',[2,0,0,0],nd),
+      r('KGD Sewaktu, Urinalisa','Pre-Op',[2,0,0,0],nd),
+      r('Tumor Marker Ca-125 (± HE4 / indeks ROMA)','Stratifikasi risiko keganasan (RMI/ROMA)',[2,0,0,0],nd),
+      r('Tumor Marker CEA & Ca 19-9','Bila curiga tipe musinosa / metastasis GIT',[1,0,0,0],nd),
+      r('Tumor Marker AFP, β-hCG, LDH','Bila usia muda — curiga tumor sel germinal',[1,0,0,0],nd),
+      r('Triple Elimination (HIV, HBsAg, Sifilis)','Pre-Op bila belum',[1,0,0,0],nd),
+    ]},
+    {id:newId(),title:'3. RADIOLOGI / IMAGING',rows:[
+      r('USG Transvaginal / Transabdominal','Karakterisasi kista (IOTA / O-RADS): ukuran, komponen solid, septa, vaskularisasi, asites',[2,0,0,0],nd),
+      r('CT / MRI Abdomen-Pelvis','Bila kista kompleks/besar atau curiga keganasan (perencanaan operasi)',[1,0,0,0],nd),
+      r('Foto Toraks / EKG','Pre-Op (konsul Anestesi)',[2,0,0,0],nd),
+      s('3a. PATOLOGI ANATOMIK'),
+      r('Potong Beku (Frozen Section) intraoperatif','Menentukan jinak/ganas → bila ganas, eskalasi ke staging bedah',[0,2,0,0],nd),
+      r('Histopatologi spesimen definitif','Diagnosis akhir jenis kista/neoplasma ovarium',[0,1,1,0],nd),
+    ]},
+    {id:newId(),title:'4. KONSULTASI',rows:[
+      r('Dokter Anestesi','Pre-Op visite wajib',[2,0,0,0],nd),
+      r('Konsultan Onkologi Ginekologi','Bila curiga keganasan pra/intra-operatif (kesiapan staging bedah)',[1,1,0,0],nd),
+      r('Dokter Penyakit Dalam / Kardiologi','Sesuai komorbiditas',[1,0,0,0],nd),
+    ]},
+    {id:newId(),title:'5. ASESMEN LANJUTAN',rows:[
+      s('a. ASESMEN MEDIS'),
+      r('DPJP (Sp.OG)','Visite harian / follow-up',2,nd),
+      r('Dokter Ruangan','Atas indikasi / emergency',1,nd),
+      s('b. ASESMEN KEPERAWATAN'),
+      r('Perawat Penanggung Jawab','Dilakukan dalam 3 shift',2,nd),
+      s('c. ASESMEN GIZI'),
+      r('Tenaga Gizi','Skrining gizi',[2,0,1,0],nd),
+      s('d. ASESMEN FARMASI'),
+      r('Telaah Resep & Rekonsiliasi Obat','',[2,0,0,0],nd),
+    ]},
+    {id:newId(),title:'6. DIAGNOSIS',rows:[
+      s('a. DIAGNOSIS MEDIS'),
+      r('Kista / Neoplasma Ovarium (N83.2 / D27) — rencana TAH + Salpingo-ooforektomi Bilateral','Update sesuai temuan & PA',2,nd),
+      s('b. DIAGNOSIS KEPERAWATAN'),
+      r('Nyeri akut, risiko perdarahan, risiko infeksi, ansietas, gangguan mobilitas (SDKI)','',2,nd),
+      s('c. DIAGNOSIS GIZI'),
+      r('Diagnosis gizi sesuai asesmen','',2,nd),
+    ]},
+    {id:newId(),title:'7. DISCHARGE PLANNING',rows:[
+      r('Perawatan luka laparotomi di rumah','Dimulai sejak hari pertama',2,nd),
+      r('Jadwal kontrol & hasil Patologi Anatomik','',[0,0,1,2],nd),
+      r('Konseling menopause bedah (kedua ovarium diangkat) & terapi sulih hormon bila premenopause; tanda bahaya','',[0,0,1,2],nd),
+    ]},
+    {id:newId(),title:'8. EDUKASI TERINTEGRASI',rows:[
+      s('a. EDUKASI / INFORMASI MEDIS'),
+      r('Penjelasan diagnosis, rencana TAH-BSO, risiko (perdarahan, cedera buli/ureter/usus), tidak dapat hamil lagi & menopause bedah','Informed consent wajib',[2,0,0,0],nd),
+      r('Informed Consent TAH + BSO; kemungkinan perluasan tindakan (staging) bila potong beku ganas','Ditandatangani pasien/keluarga + saksi',[2,0,0,0],nd),
+      s('b. EDUKASI GIZI'),
+      r('Diet tinggi protein; pasca-Op bertahap','',[2,0,2,2],nd),
+      s('c. EDUKASI KEPERAWATAN'),
+      r('Mobilisasi progresif, perawatan luka, latihan napas dalam','',[0,0,2,2],nd),
+      s('d. EDUKASI FARMASI'),
+      r('Informasi obat pulang & konseling','',[0,0,1,2],nd),
+      s('PENGISIAN FORMULIR INFORMASI DAN EDUKASI TERINTEGRASI'),
+      r('Lembar Edukasi Terintegrasi','Ditandatangani pasien/keluarga',2,nd),
+    ]},
+    {id:newId(),title:'9. TERAPI / MEDIKAMENTOSA',rows:[
+      s('PERSIAPAN OPERASI'),
+      r('Puasa 6 jam pre-Op (padat) / 2 jam (cairan bening)','Sesuai SOP anestesi',[2,0,0,0],nd),
+      r('Pemasangan IV Line (≥ 2 jalur) + Kateter Urine','',[2,1,0,0],nd),
+      r('Cairan Kristaloid (RL / NaCl 0,9%)','Maintenance / resusitasi',[2,2,2,1],nd),
+      s('PROFILAKSIS VTE'),
+      r('Profilaksis mekanik (stoking kompresi / IPC)','Sampai mobilisasi penuh',[2,2,2,1],nd),
+      r('Enoxaparin 40mg SC / Heparin 5000 IU SC','Pada risiko tinggi',[1,0,2,2],nd),
+      s('ANTIBIOTIK'),
+      r('Antibiotik Profilaksis: Cefazolin 2g IV','30–60 menit sebelum insisi',[0,2,0,0],nd),
+      r('Cephalosporin ± Metronidazole IV post-op','Sesuai kebijakan PPRA',[0,0,2,1],nd),
+      r('Antibiotik oral transisi','Saat toleransi oral baik',[0,0,0,2],nd),
+      s('ANALGETIK (multimodal)'),
+      r('Ketorolak 30mg/8jam IV + Paracetamol 1g/8jam IV','48 jam pertama post-op',[0,2,2,1],nd),
+      r('Tramadol / opioid (rescue)','Nyeri berat (VAS ≥ 7)',[0,2,1,0],nd),
+      r('Analgetik oral (Asam Mefenamat / Paracetamol)','Transisi oral',[0,0,1,2],nd),
+      s('OBAT LAINNYA'),
+      r('Antiemetik (Metoclopramide / Ondansetron) IV','',[0,2,1,0],nd),
+      r('PPI / H2-blocker IV','Profilaksis ulkus stres',[0,2,2,1],nd),
+      r('Transfusi PRC','Sesuai indikasi (Hb rendah / perdarahan)',[1,1,1,0],nd),
+    ]},
+    {id:newId(),title:'10. TATA LAKSANA / INTERVENSI',rows:[
+      s('a. TATA LAKSANA / INTERVENSI MEDIS'),
+      r('Histerektomi Total Abdominal (TAH) + Salpingo-ooforektomi Bilateral (BSO) via laparotomi','Tindakan utama',[0,2,0,0],nd),
+      r('Bilasan / aspirasi cairan peritoneum untuk sitologi','Bila curiga keganasan',[0,1,0,0],nd),
+      rw('Hindari ruptur/spillage kista; angkat spesimen utuh bila memungkinkan','Spillage kista ganas dapat menaikkan stadium',[0,2,0,0],nd),
+      r('Kesiapan staging (omentektomi, biopsi peritoneum, KGB) bila potong beku ganas','Sesuai informed consent',[0,1,0,0],nd),
+      r('Identifikasi & preservasi ureter, evaluasi integritas buli','Cegah cedera saluran kemih',[0,2,0,0],nd),
+      r('Perawatan luka operasi (inspeksi, ganti balut steril)','',[0,0,2,2],nd),
+      s('b. TATA LAKSANA / INTERVENSI KEPERAWATAN (NIC)'),
+      r('NIC 4160: Persiapan Pembedahan','',[2,0,0,0],nd),
+      r('NIC 6680: Monitoring TTV','',2,nd),
+      r('NIC 4120: Manajemen Cairan','',[0,2,2,1],nd),
+      r('NIC 1400: Manajemen Nyeri','',[0,2,2,2],nd),
+      r('NIC 3584: Perawatan Luka','',[0,0,2,2],nd),
+      r('NIC 6540: Kontrol Infeksi','',2,nd),
+      s('c. TATA LAKSANA / INTERVENSI GIZI'),
+      r('Diet bertahap: NH0 → cair → lunak → biasa sesuai bising usus','Tinggi protein',[0,0,2,2],nd),
+      s('d. TATA LAKSANA / INTERVENSI FARMASI'),
+      r('Rekomendasi DPJP & monitoring antibiotik (PPRA)','',2,nd),
+    ]},
+    {id:newId(),title:'11. MONITORING & EVALUASI',rows:[
+      s('a. DOKTER DPJP'),
+      r('Visite harian, asesmen ulang & review rencana asuhan','',2,nd),
+      r('Evaluasi luka, perdarahan pervaginam, produksi urin, fungsi usus','',[0,2,2,2],nd),
+      s('b. KEPERAWATAN (NOC)'),
+      r('Monitoring TTV tiap 1 jam (6 jam pertama) lalu tiap 4 jam','',2,nd),
+      r('Monitoring perdarahan pervaginam & luka operasi','',[0,2,2,2],nd),
+      r('Monitoring produksi urin & balance cairan','',[0,2,2,1],nd),
+      r('Monitoring nyeri (VAS/NRS)','',[0,2,2,2],nd),
+      r('Monitoring tanda infeksi & DVT/PE','',[0,1,2,2],nd),
+      s('c. GIZI (IDNT)'),
+      r('Monitoring asupan makan & Hb','',[2,0,2,0],nd),
+      s('d. FARMASI'),
+      r('Monitoring interaksi & efek samping obat; PTO','',2,nd),
+    ]},
+    {id:newId(),title:'12. MOBILISASI / REHABILITASI',rows:[
+      s('a. MEDIS'),
+      r('Instruksi mobilisasi bertahap (prinsip ERAS)','',2,nd),
+      s('b. KEPERAWATAN'),
+      r('Post-Op H1: miring kanan-kiri, ROM, duduk','',[0,0,2,0],nd),
+      r('Post-Op H2: berdiri → jalan dengan bantuan → mandiri','',[0,0,0,2],nd),
+      s('c. FISIOTERAPI'),
+      r('Latihan napas dalam & batuk efektif','',[0,0,2,1],nd),
+    ]},
+    {id:newId(),title:'13. OUTCOME / HASIL',rows:[
+      s('a. MEDIS'),
+      r('Operasi tanpa komplikasi mayor (perdarahan, cedera buli/ureter/usus)','',[0,0,0,2],nd),
+      r('Hb pasca-Op adekuat (≥ 8 g/dL) sebelum pulang','',[0,0,0,2],nd),
+      r('Tanda vital stabil','',[0,0,0,2],nd),
+      s('b. KEPERAWATAN (NOC)'),
+      r('NOC 0802: TTV stabil; NOC 1605: Kontrol Nyeri (VAS ≤ 3)','',[0,0,0,2],nd),
+      r('NOC 1102: Penyembuhan Luka Primer','',[0,0,0,2],nd),
+      r('NOC 0208: Mobilitas — pasien berjalan mandiri','',[0,0,0,2],nd),
+      s('c. GIZI'),
+      r('Asupan makan > 80% kebutuhan','',[0,0,0,2],nd),
+      s('d. FARMASI'),
+      r('Penggunaan antibiotik rasional','',[0,0,0,2],nd),
+    ]},
+    {id:newId(),title:'14. KRITERIA PULANG',rows:[
+      r('Tanda vital stabil, afebris','',[0,0,0,2],nd),
+      r('Luka operasi baik, tidak ada tanda infeksi','',[0,0,0,2],nd),
+      r('Perdarahan pervaginam minimal','',[0,0,0,2],nd),
+      r('Nyeri terkontrol dengan analgetik oral','',[0,0,0,2],nd),
+      r('Mampu mobilisasi & berkemih mandiri','',[0,0,0,2],nd),
+    ]},
+    {id:newId(),title:'15. RENCANA PULANG / EDUKASI PELAYANAN LANJUTAN',rows:[
+      r('Resume medis & keperawatan; hasil Patologi Anatomik','',[0,0,0,2],nd),
+      r('Kontrol Poli 7–10 hari; jadwal angkat jahitan; rencana lanjutan bila PA ganas (rujuk onkologi)','',[0,0,0,2],nd),
+      r('Edukasi: pantang koitus 6 minggu, aktivitas bertahap; konseling menopause bedah & terapi sulih hormon bila sesuai','',[0,0,0,2],nd),
+      r('Surat pulang, resep, surat kontrol','',[0,0,0,2],nd),
+    ]},
+  ];
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// TEMPLATE: KISTA OVARIUM — LAPAROTOMI KISTEKTOMI / SALPINGO-OOFOREKTOMI (fertility-sparing)
+// Keputusan kistektomi vs ooforektomi ditentukan intraoperatif.
+// Ref: PPK POGI/HIFERI · ACOG PB 174 (Adnexal Mass) · RCOG GTG 62 · IOTA/O-RADS
+// nd=4: Pre-Op, Operasi, Post-Op 1, Post-Op 2
+// ──────────────────────────────────────────────────────────────────────
+function tpl_kista_kistektomi(nd){
+  const r=mkRow, s=mkSub, rw=(u,k,p,n)=>({...mkRow(u,k,p,n),warn:true});
+  return [
+    {id:newId(),title:'1. ASESMEN AWAL',rows:[
+      s('ASESMEN AWAL MEDIS'),
+      r('Dokter Sp.OG (DPJP)','Anamnesis: nyeri perut bawah, gangguan haid, keinginan mempertahankan fertilitas; evaluasi ukuran & karakter kista adneksa',[2,0,0,0],nd),
+      r('Dokter IGD / Poliklinik','Pasien masuk via poli / rujukan (± akut: torsi/ruptur)',[2,0,0,0],nd),
+      s('ASESMEN AWAL KEPERAWATAN / KEBIDANAN'),
+      r('Bidan / Perawat Primer','Kondisi umum, TTV, riwayat alergi, skrining gizi & nyeri',[2,0,0,0],nd),
+    ]},
+    {id:newId(),title:'2. LABORATORIUM',rows:[
+      r('Darah Rutin (Hb, Leukosit, Trombosit, Ht)','Pre-Op & post-op',[2,0,2,0],nd),
+      r('Golongan Darah + Cross Match','Standby darah ≥ 2 kantong (PRC)',[2,0,0,0],nd),
+      r('Hemostasis (CT/BT, PT/aPTT)','Pre-Op',[2,0,0,0],nd),
+      r('Fungsi Ginjal (Ureum, Kreatinin) & Elektrolit','Pre-Op',[2,0,1,0],nd),
+      r('Fungsi Hati (SGOT, SGPT)','Pre-Op',[2,0,0,0],nd),
+      r('KGD Sewaktu, Urinalisa','Pre-Op',[2,0,0,0],nd),
+      r('Tes Kehamilan (β-hCG)','Singkirkan kehamilan / KET',[2,0,0,0],nd),
+      r('Tumor Marker Ca-125 (± HE4 / indeks ROMA)','Stratifikasi risiko keganasan',[2,0,0,0],nd),
+      r('Tumor Marker AFP, β-hCG, LDH','Bila usia muda — curiga tumor sel germinal',[1,0,0,0],nd),
+      r('Triple Elimination (HIV, HBsAg, Sifilis)','Pre-Op bila belum',[1,0,0,0],nd),
+    ]},
+    {id:newId(),title:'3. RADIOLOGI / IMAGING',rows:[
+      r('USG Transvaginal / Transabdominal','Karakterisasi kista (IOTA / O-RADS); tanda torsi/ruptur; evaluasi ovarium kontralateral',[2,0,0,0],nd),
+      r('MRI Pelvis','Bila kista kompleks / karakterisasi belum jelas (mis. endometrioma, dermoid)',[1,0,0,0],nd),
+      r('Foto Toraks / EKG','Pre-Op (konsul Anestesi)',[2,0,0,0],nd),
+      s('3a. PATOLOGI ANATOMIK'),
+      r('Potong Beku (Frozen Section) intraoperatif','Menentukan jinak/ganas → bila ganas, konseling & eskalasi ke staging',[0,2,0,0],nd),
+      r('Histopatologi spesimen definitif','Diagnosis akhir jenis kista/neoplasma ovarium',[0,1,1,0],nd),
+    ]},
+    {id:newId(),title:'4. KONSULTASI',rows:[
+      r('Dokter Anestesi','Pre-Op visite wajib',[2,0,0,0],nd),
+      r('Konsultan Fertilitas & Endokrinologi Reproduksi','Konseling preservasi fertilitas & cadangan ovarium',[1,0,0,0],nd),
+      r('Konsultan Onkologi Ginekologi','Bila curiga keganasan pra/intra-operatif (kesiapan staging)',[1,1,0,0],nd),
+    ]},
+    {id:newId(),title:'5. ASESMEN LANJUTAN',rows:[
+      s('a. ASESMEN MEDIS'),
+      r('DPJP (Sp.OG)','Visite harian / follow-up',2,nd),
+      r('Dokter Ruangan','Atas indikasi / emergency',1,nd),
+      s('b. ASESMEN KEPERAWATAN'),
+      r('Perawat Penanggung Jawab','Dilakukan dalam 3 shift',2,nd),
+      s('c. ASESMEN GIZI'),
+      r('Tenaga Gizi','Skrining gizi',[2,0,1,0],nd),
+      s('d. ASESMEN FARMASI'),
+      r('Telaah Resep & Rekonsiliasi Obat','',[2,0,0,0],nd),
+    ]},
+    {id:newId(),title:'6. DIAGNOSIS',rows:[
+      s('a. DIAGNOSIS MEDIS'),
+      r('Kista / Neoplasma Ovarium (N83.2 / D27) — rencana kistektomi / salpingo-ooforektomi unilateral (preservasi fertilitas)','Keputusan intraoperatif; update sesuai PA',2,nd),
+      s('b. DIAGNOSIS KEPERAWATAN'),
+      r('Nyeri akut, risiko perdarahan, risiko infeksi, ansietas terkait fertilitas (SDKI)','',2,nd),
+      s('c. DIAGNOSIS GIZI'),
+      r('Diagnosis gizi sesuai asesmen','',2,nd),
+    ]},
+    {id:newId(),title:'7. DISCHARGE PLANNING',rows:[
+      r('Perawatan luka laparotomi di rumah','Dimulai sejak hari pertama',2,nd),
+      r('Konseling fertilitas & kontrol hasil PA; informasi risiko rekurensi kista','',[0,0,1,2],nd),
+      r('Tanda bahaya (demam, perdarahan, nyeri memberat)','',[0,0,1,2],nd),
+    ]},
+    {id:newId(),title:'8. EDUKASI TERINTEGRASI',rows:[
+      s('a. EDUKASI / INFORMASI MEDIS'),
+      r('Penjelasan rencana kistektomi (preservasi ovarium) ATAU salpingo-ooforektomi unilateral bila ovarium tak dapat dipertahankan; keputusan intraoperatif','Informed consent wajib',[2,0,0,0],nd),
+      r('Informed Consent Kistektomi / Salpingo-ooforektomi Unilateral; kemungkinan eskalasi ke staging bila potong beku ganas; risiko penurunan cadangan ovarium & rekurensi','Ditandatangani pasien/keluarga + saksi',[2,0,0,0],nd),
+      s('b. EDUKASI GIZI'),
+      r('Diet tinggi protein; pasca-Op bertahap','',[2,0,2,2],nd),
+      s('c. EDUKASI KEPERAWATAN'),
+      r('Mobilisasi progresif, perawatan luka, latihan napas dalam','',[0,0,2,2],nd),
+      s('d. EDUKASI FARMASI'),
+      r('Informasi obat pulang & konseling','',[0,0,1,2],nd),
+      s('PENGISIAN FORMULIR INFORMASI DAN EDUKASI TERINTEGRASI'),
+      r('Lembar Edukasi Terintegrasi','Ditandatangani pasien/keluarga',2,nd),
+    ]},
+    {id:newId(),title:'9. TERAPI / MEDIKAMENTOSA',rows:[
+      s('PERSIAPAN OPERASI'),
+      r('Puasa 6 jam pre-Op (padat) / 2 jam (cairan bening)','Sesuai SOP anestesi',[2,0,0,0],nd),
+      r('Pemasangan IV Line (≥ 2 jalur) + Kateter Urine','',[2,1,0,0],nd),
+      r('Cairan Kristaloid (RL / NaCl 0,9%)','Maintenance / resusitasi',[2,2,2,1],nd),
+      s('PROFILAKSIS VTE'),
+      r('Profilaksis mekanik (stoking kompresi / IPC)','Sampai mobilisasi penuh',[2,2,2,1],nd),
+      r('Enoxaparin 40mg SC / Heparin 5000 IU SC','Pada risiko tinggi',[1,0,2,2],nd),
+      s('ANTIBIOTIK'),
+      r('Antibiotik Profilaksis: Cefazolin 2g IV','30–60 menit sebelum insisi',[0,2,0,0],nd),
+      r('Cephalosporin IV post-op','Sesuai kebijakan PPRA',[0,0,2,1],nd),
+      r('Antibiotik oral transisi','Saat toleransi oral baik',[0,0,0,2],nd),
+      s('ANALGETIK (multimodal)'),
+      r('Ketorolak 30mg/8jam IV + Paracetamol 1g/8jam IV','48 jam pertama post-op',[0,2,2,1],nd),
+      r('Tramadol / opioid (rescue)','Nyeri berat (VAS ≥ 7)',[0,2,1,0],nd),
+      r('Analgetik oral (Asam Mefenamat / Paracetamol)','Transisi oral',[0,0,1,2],nd),
+      s('OBAT LAINNYA'),
+      r('Antiemetik (Metoclopramide / Ondansetron) IV','',[0,2,1,0],nd),
+      r('PPI / H2-blocker IV','Profilaksis ulkus stres',[0,2,2,1],nd),
+      r('Transfusi PRC','Sesuai indikasi (Hb rendah / perdarahan)',[1,1,1,0],nd),
+    ]},
+    {id:newId(),title:'10. TATA LAKSANA / INTERVENSI',rows:[
+      s('a. TATA LAKSANA / INTERVENSI MEDIS'),
+      r('Kistektomi ovarium (ovary-sparing): eksisi kista dengan preservasi jaringan ovarium sehat','Pilihan utama pada kista jinak & fertilitas diinginkan',[0,2,0,0],nd),
+      r('Salpingo-ooforektomi unilateral (USO)','Bila kista besar/torsi/nekrotik atau jaringan ovarium tak dapat dipertahankan',[0,1,0,0],nd),
+      rw('Minimalkan spillage isi kista; hindari aspirasi bila curiga ganas','Spillage kista ganas dapat menaikkan stadium',[0,2,0,0],nd),
+      r('Bilasan peritoneum untuk sitologi & kesiapan staging bila potong beku ganas','Sesuai informed consent',[0,1,0,0],nd),
+      r('Preservasi ovarium & tuba kontralateral serta uterus','Menjaga fertilitas',[0,2,0,0],nd),
+      r('Perawatan luka operasi (inspeksi, ganti balut steril)','',[0,0,2,2],nd),
+      s('b. TATA LAKSANA / INTERVENSI KEPERAWATAN (NIC)'),
+      r('NIC 4160: Persiapan Pembedahan','',[2,0,0,0],nd),
+      r('NIC 6680: Monitoring TTV','',2,nd),
+      r('NIC 4120: Manajemen Cairan','',[0,2,2,1],nd),
+      r('NIC 1400: Manajemen Nyeri','',[0,2,2,2],nd),
+      r('NIC 3584: Perawatan Luka','',[0,0,2,2],nd),
+      r('NIC 6540: Kontrol Infeksi','',2,nd),
+      s('c. TATA LAKSANA / INTERVENSI GIZI'),
+      r('Diet bertahap: NH0 → cair → lunak → biasa','Tinggi protein',[0,0,2,2],nd),
+      s('d. TATA LAKSANA / INTERVENSI FARMASI'),
+      r('Rekomendasi DPJP & monitoring antibiotik (PPRA)','',2,nd),
+    ]},
+    {id:newId(),title:'11. MONITORING & EVALUASI',rows:[
+      s('a. DOKTER DPJP'),
+      r('Visite harian, asesmen ulang & review rencana asuhan','',2,nd),
+      r('Evaluasi luka, perdarahan, produksi urin, fungsi usus','',[0,2,2,2],nd),
+      s('b. KEPERAWATAN (NOC)'),
+      r('Monitoring TTV tiap 1 jam (6 jam pertama) lalu tiap 4 jam','',2,nd),
+      r('Monitoring perdarahan pervaginam & luka operasi','',[0,2,2,2],nd),
+      r('Monitoring produksi urin & balance cairan','',[0,2,2,1],nd),
+      r('Monitoring nyeri (VAS/NRS)','',[0,2,2,2],nd),
+      r('Monitoring tanda infeksi & DVT/PE','',[0,1,2,2],nd),
+      s('c. GIZI (IDNT)'),
+      r('Monitoring asupan makan & Hb','',[2,0,2,0],nd),
+      s('d. FARMASI'),
+      r('Monitoring interaksi & efek samping obat; PTO','',2,nd),
+    ]},
+    {id:newId(),title:'12. MOBILISASI / REHABILITASI',rows:[
+      s('a. MEDIS'),
+      r('Instruksi mobilisasi bertahap (prinsip ERAS)','',2,nd),
+      s('b. KEPERAWATAN'),
+      r('Post-Op H1: miring kanan-kiri, ROM, duduk','',[0,0,2,0],nd),
+      r('Post-Op H2: berdiri → jalan dengan bantuan → mandiri','',[0,0,0,2],nd),
+      s('c. FISIOTERAPI'),
+      r('Latihan napas dalam & batuk efektif','',[0,0,2,1],nd),
+    ]},
+    {id:newId(),title:'13. OUTCOME / HASIL',rows:[
+      s('a. MEDIS'),
+      r('Kista terangkat; jaringan ovarium/fertilitas dipertahankan sedapat mungkin','',[0,0,0,2],nd),
+      r('Tanpa komplikasi mayor (perdarahan, cedera organ, sepsis)','',[0,0,0,2],nd),
+      r('Hb pasca-Op adekuat (≥ 8 g/dL) sebelum pulang','',[0,0,0,2],nd),
+      r('Konseling fertilitas telah diberikan','',[0,0,0,2],nd),
+      s('b. KEPERAWATAN (NOC)'),
+      r('NOC 0802: TTV stabil; NOC 1605: Kontrol Nyeri (VAS ≤ 3)','',[0,0,0,2],nd),
+      r('NOC 1102: Penyembuhan Luka Primer','',[0,0,0,2],nd),
+      s('c. GIZI'),
+      r('Asupan makan > 80% kebutuhan','',[0,0,0,2],nd),
+      s('d. FARMASI'),
+      r('Penggunaan antibiotik rasional','',[0,0,0,2],nd),
+    ]},
+    {id:newId(),title:'14. KRITERIA PULANG',rows:[
+      r('Tanda vital stabil, afebris','',[0,0,0,2],nd),
+      r('Luka operasi baik, tidak ada tanda infeksi','',[0,0,0,2],nd),
+      r('Perdarahan pervaginam minimal','',[0,0,0,2],nd),
+      r('Nyeri terkontrol dengan analgetik oral','',[0,0,0,2],nd),
+      r('Mampu mobilisasi & berkemih mandiri','',[0,0,0,2],nd),
+    ]},
+    {id:newId(),title:'15. RENCANA PULANG / EDUKASI PELAYANAN LANJUTAN',rows:[
+      r('Resume medis & keperawatan; hasil Patologi Anatomik','',[0,0,0,2],nd),
+      r('Kontrol Poli 7–10 hari; jadwal angkat jahitan; rencana lanjutan bila PA ganas (rujuk onkologi)','',[0,0,0,2],nd),
+      r('Edukasi: pantang koitus 4–6 minggu, aktivitas bertahap; konseling fertilitas & pemantauan rekurensi kista','',[0,0,0,2],nd),
+      r('Surat pulang, resep, surat kontrol; rujukan fertilitas bila perlu','',[0,0,0,2],nd),
+    ]},
+  ];
+}
+
 // ──────────────────────────────────────────────────────────────────────
 // CATALOG + MATCH ENGINE
 // ──────────────────────────────────────────────────────────────────────
@@ -8718,6 +9069,29 @@ const DIAG_CATALOG = [
     tindakanKeys:['reseksi adenomiosis','adenomiomektomi','adenomyomectomy',
                   'reseksi adenomioma','eksisi adenomiosis'],
     buildFn: tpl_adenomiosis_reseksi,
+  },
+  {
+    id:'kista_tahbso', specialty:'obgin',
+    label:'Kista Ovarium — Histerektomi Total + Salpingo-ooforektomi Bilateral (TAH-BSO)',
+    source:'PPK POGI/HIFERI · ACOG PB 174 · RCOG GTG 62 · IOTA/O-RADS',
+    defaultDays:4, defaultLabels:['Pre-Op','Operasi','Post-Op 1','Post-Op 2'],
+    keywords:['kista ovarium','kista ovarii','kistoma ovarii','ovarian cyst','kista adneksa',
+              'n83','tumor jinak ovarium','neoplasma ovarium','kista dermoid','endometrioma'],
+    tindakanKeys:['histerektomi','hysterectomy','tah','tah bso','histerektomi total',
+                  'salpingo-ooforektomi bilateral','salpingooforektomi bilateral','bso','angkat rahim'],
+    buildFn: tpl_kista_tahbso,
+  },
+  {
+    id:'kista_kistektomi', specialty:'obgin',
+    label:'Kista Ovarium — Laparotomi Kistektomi / Salpingo-ooforektomi (Fertility-sparing)',
+    source:'PPK POGI/HIFERI · ACOG PB 174 · RCOG GTG 62 · IOTA/O-RADS',
+    defaultDays:4, defaultLabels:['Pre-Op','Operasi','Post-Op 1','Post-Op 2'],
+    keywords:['kista ovarium','kista ovarii','kistoma ovarii','ovarian cyst','kista adneksa',
+              'n83','tumor jinak ovarium','neoplasma ovarium','kista dermoid','endometrioma','kista coklat'],
+    tindakanKeys:['kistektomi','cystectomy','kistektomi ovarium','ovarian cystectomy',
+                  'salpingo-ooforektomi','salpingooforektomi','ooforektomi','oophorectomy','uso',
+                  'pengangkatan kista','eksisi kista'],
+    buildFn: tpl_kista_kistektomi,
   },
 
   // ── PENYAKIT DALAM ─────────────────────────────────────────────────
