@@ -15,7 +15,7 @@ description: >-
 
 Visual identity for **Rumah Sakit Pendidikan Prof. Dr. Chairuddin P. Lubis**,
 Universitas Sumatera Utara (Medan).
-- **Tagline:** *Quality, Safety and Friendly Hospital*
+- **Tagline:** *CAREST*
 - **Motto:** *The Era of Ultimate Excellence*
 - **Character:** warm, clean, institutional, trustworthy. A **light-committed**
   identity (cream ground + coral accent). Do **not** produce a dark theme unless
@@ -61,7 +61,7 @@ them for state, don't use them as decoration.
 
 - **UI / headings:** system sans — `"Segoe UI", system-ui, -apple-system, Arial, sans-serif`.
   Titles are heavy (weight 800), slightly tight tracking.
-- **Tagline accent:** the *"Quality, Safety and Friendly Hospital"* line is set in
+- **Tagline accent:** the *"CAREST"* motto line is set in
   **serif italic** (`Georgia, serif`) as a nod to the brand's script wordmark.
   (If a true script face is required and web-fonts are allowed, embed it as a
   `@font-face` **data URI** — never link a font CDN in a sandboxed artifact.)
@@ -97,7 +97,7 @@ Cream/white surface, brand text left, logos top-right, a **coral bottom rule**.
       <!-- optional action, e.g. a help button, sits inline with the title -->
     </div>
     <p>RS Pendidikan Prof. Dr. Chairuddin P. Lubis · Universitas Sumatera Utara</p>
-    <span class="rscpl-tagline">Quality, Safety and Friendly Hospital</span>
+    <span class="rscpl-tagline">CAREST</span>
   </div>
   <div class="rscpl-logos">
     <img src="assets/logo-usu.png"            alt="Universitas Sumatera Utara">
