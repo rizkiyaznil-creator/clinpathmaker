@@ -15,7 +15,7 @@ description: >-
 
 Visual identity for **Rumah Sakit Pendidikan Prof. Dr. Chairuddin P. Lubis**,
 Universitas Sumatera Utara (Medan).
-- **Tagline:** *CAREST*
+- **Tagline:** *CAREST* — six work-culture values: **C**ompassion, **A**cademic Excellence, **R**esponsibility, **E**xcellence through Innovation, **S**afety First, **T**eamwork & Trust.
 - **Motto:** *The Era of Ultimate Excellence*
 - **Character:** warm, clean, institutional, trustworthy. A **light-committed**
   identity (cream ground + coral accent). Do **not** produce a dark theme unless
