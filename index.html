@@ -195,6 +195,8 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#FCF5E8;color:#2C2A2
 .add-row-btn:hover{background:#e8f0fe}
 .del-btn{float:right;background:none;border:none;color:#c00;cursor:pointer;font-size:11px;line-height:1;padding:0 0 0 4px;opacity:.5}
 .del-btn:hover{opacity:1}
+.ins-btn{background:none;border:none;color:#2d8a4e;cursor:pointer;font-size:13px;line-height:1;padding:0;opacity:.55;font-weight:700}
+.ins-btn:hover{opacity:1;color:#1e6e3a}
 .var-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:10px}
 .var-tbl th{background:#1a3a5c;color:#fff;padding:5px;text-align:center;border:1px solid #666}
 .var-tbl td{border:1px solid #888;padding:4px 6px;height:20px}
@@ -1198,7 +1200,7 @@ function renderAll(){
                contenteditable="true" data-ph="Judul Sub-bagian...">${esc(row.uraian)}</td>`;
       } else {
         const warnIco = row.warn ? `<span class="warn-ico no-export" contenteditable="false" title="⚠️ Bukti literatur terbatas — verifikasi dengan guideline institusi Anda">!</span>` : '';
-        h += `<td class="uraian-td"><span class="del-wrap no-export" style="float:right" contenteditable="false"><button class="del-btn" onclick="deleteRow(${sec.id},${row.id})" title="Hapus baris">×</button></span><span class="uraian-edit" data-rid="${row.id}" data-sid="${sec.id}" data-f="uraian" contenteditable="true" data-ph="Uraian kegiatan...">${warnIco}${esc(row.uraian)}</span></td>`;
+        h += `<td class="uraian-td"><span class="del-wrap no-export" style="float:right;display:inline-flex;align-items:center;gap:4px" contenteditable="false"><button class="ins-btn" onclick="insertRowAfter(${sec.id},${row.id})" title="Sisipkan baris di bawah">+</button><button class="del-btn" onclick="deleteRow(${sec.id},${row.id})" title="Hapus baris">×</button></span><span class="uraian-edit" data-rid="${row.id}" data-sid="${sec.id}" data-f="uraian" contenteditable="true" data-ph="Uraian kegiatan...">${warnIco}${esc(row.uraian)}</span></td>`;
         // Day cells
         row.days.forEach((d,di)=>{
           const cls = d===2?'req':d===1?'opt':'na';
@@ -1342,6 +1344,16 @@ function deleteRow(sid, rid){
   renderAll();
 }
 
+function insertRowAfter(sid, rid){
+  syncFromDOM();
+  const sec = sections.find(s=>s.id===sid);
+  if(!sec) return;
+  const idx = sec.rows.findIndex(r=>r.id===rid);
+  if(idx < 0) sec.rows.push(row('','', 0));
+  else sec.rows.splice(idx+1, 0, row('','', 0));
+  renderAll();
+}
+
 function confirmReset(){
   if(confirm('Reset seluruh isi Clinical Pathway ke template awal?\nSemua perubahan akan hilang.')){
     ROW_ID=1;
@@ -1363,7 +1375,7 @@ function exportDocx(){
   const clone = el.cloneNode(true);
 
   // Remove interactive UI elements
-  clone.querySelectorAll('.add-row-btn, .del-btn').forEach(n => n.remove());
+  clone.querySelectorAll('.add-row-btn, .del-btn, .ins-btn').forEach(n => n.remove());
   clone.querySelectorAll('[contenteditable]').forEach(n => {
     n.removeAttribute('contenteditable');
     n.removeAttribute('data-ph');
@@ -1430,7 +1442,7 @@ body { font-family: Arial, sans-serif; font-size: 9pt; color: #222; margin: 0; p
 .cpt .uraian-td { font-size: 8pt; }
 .cpt .ket-td { font-size: 7.5pt; color: #333; word-break: break-word; }
 .cpt .day-td { text-align: center; }
-.add-row-btn, .del-btn { display: none !important; }
+.add-row-btn, .del-btn, .ins-btn { display: none !important; }
 .var-tbl { width: 100%; border-collapse: collapse; margin-top: 8pt; font-size: 8pt; }
 .var-tbl th { background: #1a3a5c; color: #fff; padding: 4pt; text-align: center; border: 1px solid #666; }
 .var-tbl td { border: 1px solid #888; padding: 3pt 5pt; height: 16pt; }
